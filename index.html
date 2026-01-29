@@ -49,6 +49,10 @@
                 const selected = new Date(input.value);
                 if (isNaN(selected.getTime())) return; // Invalid date
 
+                const inputDay = selected.getDate();
+                const inputMonth = selected.getMonth(); // 0-11
+                const inputYear = selected.getFullYear();
+
                 // Helper to format date as DD/MM/YYYY
                 function formatDate(d) {
                     const day = d.getDate().toString().padStart(2, '0');
@@ -57,15 +61,19 @@
                     return `${day}/${month}/${year}`;
                 }
 
-                // +1 month
-                const oneMonth = new Date(selected);
-                oneMonth.setMonth(oneMonth.getMonth() + 1);
-                oneMonthDiv.innerHTML = `1 Month from Input: ${formatDate(oneMonth)}`;
+                // +1 month without adjusting day for month length
+                let oneMonthAdd = 1;
+                let oneNewMonth = (inputMonth + oneMonthAdd) % 12;
+                let oneNewYear = inputYear + Math.floor((inputMonth + oneMonthAdd) / 12);
+                const oneMonthStr = inputDay.toString().padStart(2, '0') + '/' + (oneNewMonth + 1).toString().padStart(2, '0') + '/' + oneNewYear;
+                oneMonthDiv.innerHTML = `1 Month from Input: ${oneMonthStr}`;
 
-                // +3 months
-                const threeMonths = new Date(selected);
-                threeMonths.setMonth(threeMonths.getMonth() + 3);
-                threeMonthsDiv.innerHTML = `3 Months from Input: ${formatDate(threeMonths)}`;
+                // +3 months without adjusting day for month length
+                let threeMonthAdd = 3;
+                let threeNewMonth = (inputMonth + threeMonthAdd) % 12;
+                let threeNewYear = inputYear + Math.floor((inputMonth + threeMonthAdd) / 12);
+                const threeMonthsStr = inputDay.toString().padStart(2, '0') + '/' + (threeNewMonth + 1).toString().padStart(2, '0') + '/' + threeNewYear;
+                threeMonthsDiv.innerHTML = `3 Months from Input: ${threeMonthsStr}`;
 
                 // +10 days with adjustment
                 let tenDays = new Date(selected);
